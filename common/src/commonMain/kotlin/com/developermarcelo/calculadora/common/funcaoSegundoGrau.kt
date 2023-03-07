@@ -1,17 +1,10 @@
 package com.developermarcelo.calculadora.common
 
-fun funcaoSegundoGrau(valor: String): String {
-    /**
-     * Para resolver uma equação do segundo grau, há vários métodos,
-     * como a fórmula de Bhaskara e a soma e produto.
-     * vamos calcular o DELTA
-     * formula -> Δ = b² – 4ac
-     * ex ->  2x²+8x–24
-     * -> A: 2 - B: 8 - C : -24
-     * -> Δ = 8² – 4 * 2 * (-24)
-     * */
-    var tempValor = valor
+import kotlin.math.sqrt
 
+fun funcaoSegundoGrau(valor: String): String {
+    var tempValor = valor.replace(Regex("(?<![0-9])x"), "1x")
+    
     val valorA = Regex("[+-]?[0-9]+").find(tempValor)?.value
     tempValor = tempValor.replaceFirst(valorA!!, "")
 
@@ -20,73 +13,45 @@ fun funcaoSegundoGrau(valor: String): String {
 
     val valorC = Regex("[+-][0-9]+").find(tempValor)?.value
 
-    /**
-     * 2x² + 8x – 24
-     * Δ = b² [– 4ac]
-     * Δ = 8² – 4·2·(– 24)
-     * Δ = 64 + 192
-     * Δ = 256
-     * */
-
     val mult = if (valorC != null) {
         resolverMutiplicacao(valorA, valorC)
-    } else "Error"
+    } else 0
 
     val bElevadoB = elevado(valorB)
 
-    val result = resolver("$bElevadoB $mult")
+    val result = resolver(bElevadoB, mult)
 
-    return "Δ = $result"
+    println("Delta = $result")
+
+
+    val delta = "Δ = $result"
+
+    return "$delta, ${calcularRaizes(valorA, valorB, result)}"
 }
 
-fun resolver(s: String): String {
-    val splitCount = s.split(" ").filter { it != "" }
-    var result = 0
+fun calcularRaizes(valordeA: String, valordeB: String, delta: Int): String {
+    val raizQuadrada = sqrt(delta.toDouble())
+    val valorB = valordeB.toInt() * -1
 
-    //[64, +, 192]
-    // 0   1   2
+    val x1 = (valorB + raizQuadrada) / (2 * valordeA.toInt())
+    val x2 = (valorB - raizQuadrada) / (2 * valordeA.toInt())
 
-    when (splitCount[1]) {
-        "+" -> {
-            result = splitCount[0].toInt() + splitCount[2].toInt()
-        }
-
-        "-" -> {
-            result = splitCount[0].toInt() - splitCount[2].toInt()
-        }
-    }
-
-    return result.toString()
+    return "x1: ${x1.toInt()}, x2: ${x2.toInt()}"
 }
 
-fun elevado(valorB: String): Int {
-    val valor = Regex("[0-9]+").find(valorB)?.value?.toInt() ?: 0
-    return valor * valor
-}
+fun resolver(valorB: Int, valor: Int): Int = valorB + valor
 
-fun resolverMutiplicacao(valorA: String, valorC: String): String {
-    val valA = porSinal(valorA)
+fun elevado(valor: String): Int = valor.toInt() * valor.toInt()
 
-    val sinal = if (resolverSinais("-4$valA$valorC") % 2 == 0) "+" else "-"
-    println("-4$valA$valorC")
 
-    val numeros = Regex("[0-9]+")
+fun resolverMutiplicacao(valorA: String, valorC: String): Int {
+    val numeros = Regex("[+-]?[0-9]+")
 
     var resul = 1
 
-    numeros.findAll("-4$valA$valorC").forEach { matchResult ->
+    numeros.findAll("-4 $valorA $valorC").forEach { matchResult ->
         resul *= matchResult.value.toInt()
     }
 
-    println("result = $resul")
-
-    return "$sinal $resul"
+    return resul
 }
-
-fun porSinal(valor: String): String = if (valor.matches(Regex("[+-][0-9]+"))) {
-    println("porSinal: $valor")
-    valor
-} else "+$valor"
-
-
-fun resolverSinais(value: String) = value.count { it == '-' }

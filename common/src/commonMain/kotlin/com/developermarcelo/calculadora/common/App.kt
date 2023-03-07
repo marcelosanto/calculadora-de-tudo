@@ -22,27 +22,18 @@ fun App() {
     var valorDoInput by remember { mutableStateOf("") }
     var texto by remember { mutableStateOf("") }
     var inputTemp by remember { mutableStateOf("") }
+    val platform = getPlatformName()
 
-    /**
-     * [] <- é um range, tudo que esta dentro é verificado se contem no contexto usado,
-     * exemplo [1-3] -> verifica se o o numero em questao ta de 1 a 3.
-     * ? -> operador em regex que significa 0 ou 1 ocorrencia. ou seja é opcional
-     * * -> operador em regex que significa nenhuma ou varias ocorrencia.
-     * + -> operador em regex que significa uma ou varias ocorrencia.
-     * \\s -> identifica os espacos
-     * */
-
-    val regexFuncaoSegundoGrau = Regex("[+-]?[1-9][0-9]*x²[+-][0-9]+x[+-][0-9]+")
+    val regexFuncaoSegundoGrau = Regex("[+-]?[1-9]?[0-9]*x²[+-][0-9]*x[+-][0-9]+")
 
     Surface(modifier = Modifier.fillMaxSize().padding(16.dp), color = Color.Gray) {
-        Text(text = "Calculadora de Tudo")
+        if (platform == "Android") Text(text = "Calculadora de Tudo")
 
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
             TextField(
                 value = TextFieldValue(
@@ -54,14 +45,10 @@ fun App() {
                 },
             )
 
-            texto = if (valorDoInput.matches(regexFuncaoSegundoGrau)) {
-                funcaoSegundoGrau(valorDoInput)
-            } else "$valorDoInput não é uma função do segundo grau"
             Text(text = texto)
 
             val botoesDaCalculadora =
                 listOf("x²", "x", "/", "-", "7", "8", "9", "*", "4", "5", "6", "+", "1", "2", "3", "=")
-
 
             Button(onClick = {
                 inputTemp = valorDoInput
@@ -70,7 +57,6 @@ fun App() {
                 Text("<-")
             }
 
-            //EXEMPLO
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),
                 contentPadding = PaddingValues(
@@ -83,7 +69,11 @@ fun App() {
             {
                 items(botoesDaCalculadora) {
                     Button(modifier = Modifier.padding(4.dp), onClick = {
-                        valorDoInput += it
+                        if (it == "=") {
+                            texto = if (valorDoInput.matches(regexFuncaoSegundoGrau)) {
+                                funcaoSegundoGrau(valorDoInput)
+                            } else "$valorDoInput não é uma função do segundo grau"
+                        } else valorDoInput += it
                     }) {
                         Text(it)
                     }
