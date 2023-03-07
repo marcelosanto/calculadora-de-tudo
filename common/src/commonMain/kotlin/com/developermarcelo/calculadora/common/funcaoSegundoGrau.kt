@@ -4,7 +4,7 @@ import kotlin.math.sqrt
 
 fun funcaoSegundoGrau(valor: String): String {
     var tempValor = valor.replace(Regex("(?<![0-9])x"), "1x")
-    
+
     val valorA = Regex("[+-]?[0-9]+").find(tempValor)?.value
     tempValor = tempValor.replaceFirst(valorA!!, "")
 
@@ -13,20 +13,19 @@ fun funcaoSegundoGrau(valor: String): String {
 
     val valorC = Regex("[+-][0-9]+").find(tempValor)?.value
 
-    val mult = if (valorC != null) {
-        resolverMutiplicacao(valorA, valorC)
-    } else 0
-
-    val bElevadoB = elevado(valorB)
-
-    val result = resolver(bElevadoB, mult)
-
-    println("Delta = $result")
+    val multi = valorC?.let { resolverMutiplicacao(valorA, it) } ?: 0
 
 
-    val delta = "Δ = $result"
+    val elevarNumero = elevado(valorB)
 
-    return "$delta, ${calcularRaizes(valorA, valorB, result)}"
+    val delta = resolver(elevarNumero, multi)
+
+    println("Delta = $delta")
+
+
+    //val delta = "Δ = $result"
+
+    return "Δ = $delta, ${calcularRaizes(valorA, valorB, delta)}"
 }
 
 fun calcularRaizes(valordeA: String, valordeB: String, delta: Int): String {
