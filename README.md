@@ -1,10 +1,9 @@
-# Calculadora de Tudo - Kotlin Multiplatform (Desktop|Android)
+# Calculadora de Tudo - **Kotlin Multiplatform** (Desktop|Android)
 
-An example of **Kotlin Multiplatform** todo app with shared Android/Desktop Compose UI
+-   `Android` (Compose)
+-   `Desktop/JVM` (Compose)
 
-This example supports the following targets:
-
-- `Android` (Compose)
-- `Desktop/JVM` (Compose)
-
-# under construction
+# Funcionalidades
+| Implementação | Status | Completo |
+|--|--|--|
+| Equação do 2º Grau | compativel somente com as completas | parcialmente
