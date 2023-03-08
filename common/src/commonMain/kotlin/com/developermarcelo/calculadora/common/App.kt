@@ -71,7 +71,7 @@ fun App() {
                     Button(modifier = Modifier.padding(4.dp), onClick = {
                         if (it == "=") {
                             texto = if (valorDoInput.matches(regexFuncaoSegundoGrau)) {
-                                funcaoSegundoGrau(valorDoInput)
+                                equacaoDoSegundoGrau(valorDoInput)
                             } else "$valorDoInput não é uma função do segundo grau"
                         } else valorDoInput += it
                     }) {
