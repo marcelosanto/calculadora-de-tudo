@@ -26,12 +26,12 @@ fun App() {
 
     val regexFuncaoSegundoGrau = Regex("[+-]?[1-9]?[0-9]*x²[+-][0-9]*x[+-][0-9]+")
 
-    Surface(modifier = Modifier.fillMaxSize().padding(16.dp), color = Color.Gray) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.Gray.copy(alpha = 0.5f)) {
         if (platform == "Android") Text(text = "Calculadora de Tudo")
 
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 40.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -48,14 +48,28 @@ fun App() {
             Text(text = texto)
 
             val botoesDaCalculadora =
-                listOf("x²", "x", "/", "-", "7", "8", "9", "*", "4", "5", "6", "+", "1", "2", "3", "=")
-
-            Button(onClick = {
-                inputTemp = valorDoInput
-                valorDoInput = inputTemp.dropLast(1)
-            }) {
-                Text("<-")
-            }
+                listOf(
+                    "C",
+                    "x",
+                    "²",
+                    "/",
+                    "7",
+                    "8",
+                    "9",
+                    "*",
+                    "4",
+                    "5",
+                    "6",
+                    "-",
+                    "1",
+                    "2",
+                    "3",
+                    "+",
+                    "0",
+                    ".",
+                    "<-",
+                    "="
+                )
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(100.dp),
@@ -69,11 +83,21 @@ fun App() {
             {
                 items(botoesDaCalculadora) {
                     Button(modifier = Modifier.padding(4.dp), onClick = {
-                        if (it == "=") {
-                            texto = if (valorDoInput.matches(regexFuncaoSegundoGrau)) {
-                                equacaoDoSegundoGrau(valorDoInput)
-                            } else "$valorDoInput não é uma função do segundo grau"
-                        } else valorDoInput += it
+                        when (it) {
+                            "=" -> {
+                                texto = if (valorDoInput.matches(regexFuncaoSegundoGrau)) {
+                                    equacaoDoSegundoGrau(valorDoInput)
+                                } else "Error: Não reconhecido"
+                            }
+
+                            "C" -> valorDoInput = ""
+                            "<-" -> {
+                                inputTemp = valorDoInput
+                                valorDoInput = inputTemp.dropLast(1)
+                            }
+
+                            else -> valorDoInput += it
+                        }
                     }) {
                         Text(it)
                     }

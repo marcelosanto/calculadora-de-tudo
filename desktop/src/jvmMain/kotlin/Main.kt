@@ -9,7 +9,7 @@ import com.developermarcelo.calculadora.common.App
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        state = WindowState(size = DpSize(Dp(500F), Dp(500F))),
+        state = WindowState(size = DpSize(Dp(500F), Dp(700F))),
         title = "CALCULADORA DE TUDO",
         resizable = false
         //icon = Icon(painter = painterResource(useResource()), contentDescription = null)

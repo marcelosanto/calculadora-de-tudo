@@ -11,7 +11,6 @@ fun equacaoDoSegundoGrau(valor: String): String {
     }
 
     val (valorA, valorB, valorC) = valores
-
     val multi = resolverMutiplicacao(valorA, valorC)
     val elevar = elevar(valorB)
     val delta = resolver(elevar, multi)
